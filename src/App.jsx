@@ -12,7 +12,7 @@ function App() {
       description: description.current.value,
       id: Date.now(),
     });
-    setTodo([...Todo]);
+    setTodo([...Todo]); // buy using spraed opertor aik new array hai jis baki array k propery be hai
     empty();
   }
 
@@ -27,47 +27,74 @@ function App() {
     setTodo([...Todo]);
   }
 
-  const empty = () => { title.current.value = ""; description.current.value = "";};
+  // empty the input value;
+
+  const empty = () => { title.current.value = ""; description.current.value = ""};
+
   return (
     <> 
     <h1 style={styles.titleHeading}>TODO APP</h1>
   {/* form start */}
       <div style={styles.container}>
         <form onSubmit={AddTodo} style={styles.form}>
-          <input ref={title}placeholder="Enter Title..."style={styles.input}/>
+          <input ref={title} placeholder="Enter Title..."style={styles.input}/>
           <input ref={description} placeholder="Enter Description..." style={styles.input}/>
           <button style={styles.addButton}>Add Todo</button>
         </form>
 {/* form End */}
-               {/* Rnder data on screnn start and condiontal rendering */}
-        <div>
-          {Todo.length > 0 ? (Todo.map((item, index) => 
-            (<div key={item.id} style={styles.card}>
-            <h2 style={styles.title}>{item.title}</h2>
-                <p style={styles.description}>{item.description}</p>
-                <div style={styles.buttonContainer}>
-                  <button onClick={() => delet(index)}style={styles.deleteButton}>Delete</button>
-                  <button onClick={() => updated(index)} style={styles.updateButton} >Update </button>
-                </div>
-              </div>
-            ))
-          )
-          : (<h2 style={styles.noTodo}>No Todo Found</h2>)}
-        </div>
-      </div>
+</div>
+       {/* Rnder data on screnn start and condiontal rendering */}
+       <div style={styles.todoContainer} >
+  {Todo.length > 0 ? ( Todo.every((res) => res.title === '' || res.description === '') ? (<h2 style={styles.noTodo}>Please enter something...</h2>) 
+  : (Todo.map((item, index) => {
+        return (
+          <div key={item.id} style={styles.card}>
+            <h2 style={styles.title}>Title: {item.title}</h2>
+            <p style={styles.description}>Description: {item.description}</p>
+            {/* Button container */}
+            <div style={styles.buttonContainer}>
+              <button onClick={() => delet(index)} style={styles.deleteButton}>Delete</button>
+              <button onClick={() => updated(index)} style={styles.updateButton}>Update</button>
+            </div>
+          </div>
+        ); // map function end
+      })
+    )
+  ) : (
+    <h2 style={styles.noTodo}>No Todo Found</h2>
+  )}
+</div>
+
       {/* Rnder data on screnn End and condiontal rendering */}
     </>
   );
 }
  // Styling of all todo app
 const styles = {
-  container: {
-    maxWidth: "600px",
-    margin: "auto",
-    padding: "20px",
-    textAlign: "center",
-    fontFamily: "Arial, sans-serif",
-  },
+    container: {
+      maxWidth: "600px",
+      margin: "auto",
+      padding: "20px",
+      textAlign: "center",
+      fontFamily: "Arial, sans-serif",
+    },
+    todoContainer: {  /* Add this */
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",  /* Centering the cards */
+      marginTop: "20px",
+    },
+    card: {
+      width: "80%", /* Adjusted width */
+      maxWidth: "400px", /* Prevents it from being too wide */
+      border: "1px solid #ddd",
+      borderRadius: "12px",
+      padding: "20px",
+      margin: "10px auto", /* Centered */
+      backgroundColor: "#fff",
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+      textAlign: "left", /* Ensures text alignment */
+    },
   titleHeading: {
     fontSize: "32px",
     fontWeight: "bold",
@@ -104,14 +131,6 @@ const styles = {
     borderRadius: "8px",
     cursor: "pointer",
     transition: "0.3s",
-  },
-  card: {
-    border: "1px solid #ddd",
-    borderRadius: "12px",
-    padding: "20px",
-    margin: "20px 0",
-    backgroundColor: "#fff",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
   },
   title: {
     fontSize: "20px",
@@ -152,6 +171,7 @@ const styles = {
     color: "#888",
     fontSize: "18px",
     marginTop: "20px",
+    textAlign:'center'
   },
 };
 
